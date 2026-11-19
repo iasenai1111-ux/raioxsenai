@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext y=%22.9em%22 font-size=%2290%22%3E%F0%9F%8E%B2%3C/text%3E%3C/svg%3E">
+<title>Sorteio dos setores · Raio-X da Escola SENAI</title>
+<style>
+  :root{--azul:#0B4FA8;--laranja:#F28C28;--fundo:#091b3a;--card:#12305f;--texto:#fff;--cinza:#aabad6}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:var(--fundo);color:var(--texto)}
+  header{background:#0b2a5c;padding:14px 20px}
+  header .in{max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+  header h1{margin:0;font-size:1.4rem} header small{color:var(--cinza)}
+  main{max-width:1400px;margin:0 auto;padding:20px;display:grid;grid-template-columns:340px 1fr;gap:20px}
+  .caixa{background:#0f2750;border-radius:16px;padding:18px}
+  h2{margin:0 0 10px;font-size:1.1rem;color:var(--laranja)}
+  label{display:block;font-weight:600;margin:12px 0 6px;color:#dfe7f5}
+  textarea,input{width:100%;padding:10px;border-radius:10px;border:1px solid #2b4a80;background:#0a1f44;color:#fff;font:inherit}
+  textarea{height:260px;resize:vertical}
+  small.d{color:var(--cinza);display:block;margin-top:6px;line-height:1.4}
+  button{font:inherit;font-weight:700;cursor:pointer;border:0;border-radius:12px;padding:14px 18px}
+  .pri{background:var(--laranja);color:#091b3a;font-size:1.15rem}
+  .sec{background:#1d3f78;color:#fff}
+  button:disabled{opacity:.4;cursor:default}
+  .acoes{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}.acoes button{flex:1;min-width:140px}
+  #palco{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:300px;text-align:center}
+  #quem{font-size:2.6rem;font-weight:800;min-height:1.3em}
+  #dec{font-size:3.6rem;font-weight:900;color:var(--laranja);line-height:1;margin:10px 0;font-variant-numeric:tabular-nums}
+  #dec.girando{color:#6f86b3}
+  #dec.caiu{animation:caiu .5s ease-out}
+  @keyframes caiu{0%{transform:scale(1.5)}100%{transform:scale(1)}}
+  #msg{color:var(--cinza);font-size:1.1rem}
+  .grade{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:6px}
+  .dec{background:var(--card);border-radius:14px;padding:12px;min-height:110px}
+  .dec b{display:block;font-size:1.15rem;color:var(--laranja)}
+  .dec span{display:inline-block;background:#1d3f78;border-radius:999px;padding:4px 12px;margin:4px 4px 0 0;font-weight:600}
+  .vagas{color:var(--cinza);font-size:.85rem}
+  .aviso{background:#3a2a05;border-left:4px solid #e0a800;padding:10px 12px;border-radius:8px;font-size:.92rem;margin-top:12px;color:#ffe9a8}
+  .oculto{display:none}
+  @media (max-width:900px){main{grid-template-columns:1fr}.grade{grid-template-columns:repeat(2,1fr)}#dec{font-size:5rem}}
+</style>
+</head>
+<body>
+<header><div class="in"><div><h1>🎲 Sorteio dos setores</h1><small>Raio-X da Escola SENAI · Fundamentos de IA e Análise de Dados · SENAI</small></div>
+<small>Os nomes ficam só nesta tela: nada é salvo nem enviado.</small></div></header>
+<main>
+<nav aria-label="Navegação" style="margin-bottom:16px"><a style="color:inherit;text-decoration:underline" href="./">🔎 Voltar ao exercício</a></nav>
+  <section class="caixa">
+    <h2>1. Quem participa</h2>
+    <label for="nomes">Um apelido ou nome por linha</label>
+    <textarea id="nomes" placeholder="Coruja&#10;Pixel&#10;Raio&#10;..."></textarea>
+    <small class="d" id="conta">0 participantes</small>
+    <label for="pote">2. Setores no pote (um por linha)</label>
+    <textarea id="pote" style="height:200px"></textarea>
+    <small class="d">Preenchido sozinho conforme o número de pessoas: todos os setores entram uma vez, e as pessoas que sobram vão para os setores maiores. Pode editar.</small>
+    <div class="aviso oculto" id="avisoPote"></div>
+    <div class="acoes"><button class="sec" id="btPrep" onclick="preparar()">✔ Preparar sorteio</button></div>
+  </section>
+
+  <section>
+    <div class="caixa" id="palco">
+      <div id="quem">Prepare o sorteio ao lado</div>
+      <div id="dec">????</div>
+      <div id="msg"></div>
+      <div class="acoes" style="width:100%;max-width:640px">
+        <button class="pri" id="btUm" onclick="sortearUm()" disabled>🎲 Sortear o próximo</button>
+        <button class="sec" id="btTodos" onclick="sortearTodos()" disabled>⏩ Sortear todos</button>
+        <button class="sec" id="btRefazer" onclick="preparar()" disabled>↺ Refazer</button>
+      </div>
+    </div>
+    <div class="caixa" style="margin-top:20px">
+      <h2>Resultado</h2>
+      <div class="grade" id="grade"></div>
+    </div>
+  </section>
+</main>
+
+<script>
+const DECADAS = ["Oficina de Mecânica","Oficina de Elétrica","Oficina de Solda","Laboratório de Informática","Laboratório de Automação","Ferramentaria e Almoxarifado","Salas de aula","Áreas comuns"];
+const EXTRAS = ["Laboratório de Informática","Oficina de Mecânica","Áreas comuns","Oficina de Elétrica","Oficina de Solda","Laboratório de Automação","Salas de aula","Ferramentaria e Almoxarifado"];
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+let fila = [], pote = [], resultado = [], ocupado = false, emLote = false;
+function botoes(){ const ativo = !ocupado && !emLote; $("btUm").disabled = $("btTodos").disabled = !(ativo && fila.length); $("btRefazer").disabled = !ativo || (!fila.length && !resultado.length); $("btPrep").disabled = !ativo; }
+
+function nomes(){ return $("nomes").value.split("\n").map(s => s.trim()).filter(Boolean); }
+function poteSugerido(n){
+  if (n <= 0) return [];
+  if (n <= 8) return DECADAS.slice();          // menos gente que setores: sobra setor
+  const p = DECADAS.slice(); let i = 0;
+  while (p.length < n) { p.push(EXTRAS[i % EXTRAS.length]); i++; }
+  return p;
+}
+$("nomes").addEventListener("input", () => {
+  const n = nomes().length;
+  $("conta").textContent = n + (n === 1 ? " participante" : " participantes");
+  $("pote").value = poteSugerido(n).join("\n");
+});
+function embaralha(a){ for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+
+function falhou(texto){
+  fila = []; pote = []; resultado = []; desenharGrade(); botoes();
+  $("dec").textContent = "????"; $("msg").textContent = "";
+  const av = $("avisoPote"); av.textContent = texto; av.classList.remove("oculto");
+  $("quem").textContent = "Corrija ao lado e prepare de novo";
+}
+function preparar(){
+  if (ocupado || emLote) return;
+  const ns = nomes();
+  const av = $("avisoPote"); av.classList.add("oculto");
+  const p = $("pote").value.split("\n").map(x => x.trim()).filter(Boolean);
+  if (!ns.length) return falhou("Escreva os participantes, um por linha.");
+  const dup = ns.filter((x, i) => ns.findIndex(y => y.toLowerCase() === x.toLowerCase()) !== i);
+  if (dup.length) return falhou("Nome repetido: " + dup.join(", ") + ". Diferencie (ex.: Ana B.).");
+  if (p.length < ns.length) return falhou(`O pote tem ${p.length} setores para ${ns.length} pessoas. Coloque pelo menos ${ns.length}.`);
+  if (p.length > ns.length) { av.textContent = `Vão sobrar ${p.length - ns.length} setores sem ninguém (tudo bem).`; av.classList.remove("oculto"); }
+  fila = embaralha(ns.slice()); pote = embaralha(p.slice()).slice(0, ns.length); resultado = [];
+  $("quem").textContent = "Pronto! " + ns.length + " para sortear"; $("dec").textContent = "????"; $("msg").textContent = "";
+  desenharGrade(); botoes();
+}
+function desenharGrade(){
+  const usadas = [...new Set([...DECADAS, ...pote, ...resultado.map(r => r.d)])];
+  $("grade").innerHTML = usadas.map(d => {
+    const q = resultado.filter(r => r.d === d).map(r => `<span>${esc(r.n)}</span>`).join("");
+    const total = pote.filter(x => x === d).length + resultado.filter(r => r.d === d).length;
+    return `<div class="dec"><b>${esc(d)}</b>${q || '<span class="vagas">' + (total ? "aguardando" : "ninguém") + "</span>"}</div>`;
+  }).join("");
+}
+function sortearUm(rapido, doLote){
+  return new Promise(res => {
+    if (ocupado || !fila.length || (emLote && !doLote)) return res();
+    ocupado = true; botoes();
+    const nome = fila.shift(), d = pote.shift(), el = $("dec");
+    $("quem").textContent = nome; $("msg").textContent = "vai inspecionar...";
+    el.className = "girando"; let t = 0; const giros = rapido ? 10 : 22;
+    const roda = () => {
+      el.textContent = DECADAS[Math.floor(Math.random() * DECADAS.length)];
+      if (++t < giros) return setTimeout(roda, 40 + t * (rapido ? 6 : 9));
+      el.className = ""; void el.offsetWidth; el.className = "caiu"; el.textContent = d;
+      $("msg").textContent = (fila.length ? `faltam ${fila.length}` : "terminou! 🎉");
+      resultado.push({ n: nome, d }); desenharGrade(); ocupado = false; botoes();
+      setTimeout(res, rapido ? 500 : 0);
+    };
+    roda();
+  });
+}
+async function sortearTodos(){ if (emLote || ocupado) return; emLote = true; botoes(); while (fila.length) await sortearUm(true, true); emLote = false; botoes(); }
+desenharGrade();
+</script>
+</body>
+</html>
