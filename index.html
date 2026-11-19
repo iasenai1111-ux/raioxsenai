@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext y=%22.9em%22 font-size=%2290%22%3E%F0%9F%94%8E%3C/text%3E%3C/svg%3E">
+<title>Raio-X da Escola SENAI</title>
+<style>
+  :root{--azul:#0B4FA8;--azul2:#083b7e;--laranja:#F28C28;--verde:#1f9d55;--fundo:#f4f6fb;--texto:#1d2433;--cinza:#6b7280;--borda:#dfe3ec}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:var(--fundo);color:var(--texto)}
+  header{background:var(--azul);color:#fff;padding:14px 16px}
+  header .in{max-width:820px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px}
+  header h1{margin:0;font-size:1.25rem} header small{opacity:.85}
+  main{max-width:820px;margin:0 auto;padding:16px}
+  .card{background:#fff;border:1px solid var(--borda);border-radius:14px;padding:20px;margin-bottom:16px}
+  h2{margin:0 0 8px;font-size:1.2rem;color:var(--azul)}
+  p{line-height:1.5}
+  label{display:block;font-weight:600;margin:12px 0 6px}
+  input,select{width:100%;padding:11px;border:1px solid var(--borda);border-radius:10px;font:inherit;font-size:1rem;background:#fff}
+  .linha{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .linha3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+  button{font:inherit;cursor:pointer;border:0;border-radius:10px;padding:12px 16px;font-weight:600}
+  .pri{background:var(--azul);color:#fff}.pri:hover{background:var(--azul2)}
+  .sec{background:#e8eefb;color:var(--azul)}
+  .ok{background:#e2f4ea;color:var(--verde)}
+  .aviso{background:#fff7e0;border-left:4px solid #e0a800;padding:10px 12px;border-radius:8px;font-size:.93rem}
+  .erro{color:#c0392b;font-weight:600;min-height:1.2em;margin-top:8px}
+  .prompt{background:#0f1b33;color:#e8eefb;border-radius:10px;padding:14px;font-family:ui-monospace,Consolas,monospace;font-size:.92rem;white-space:pre-wrap}
+  .item{border:1px solid var(--borda);border-radius:12px;padding:12px;margin:10px 0;display:flex;gap:12px;align-items:center}
+  .item .pri-tag{font-weight:800;font-size:.8rem;border-radius:999px;padding:4px 10px;white-space:nowrap}
+  .item .txt{flex:1;font-size:.95rem}.item .txt small{color:var(--cinza)}
+  .item button{white-space:nowrap}
+  .t-Baixa{background:#e6f0ff;color:#0B4FA8}.t-Média{background:#fff2cc;color:#7a5600}.t-Alta{background:#fde2c8;color:#8a3b00}.t-Crítica{background:#c0392b;color:#fff}
+  .acoes{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}.acoes button{flex:1;min-width:180px}
+  .oculto{display:none!important}
+  footer{text-align:center;color:var(--cinza);font-size:.8rem;padding:16px}
+  /* ---------- TELÃO ---------- */
+  body.telao{background:#091b3a;color:#fff}
+  body.telao header{background:#0b2a5c}
+  body.telao header .in, body.telao main{max-width:1600px}
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:14px}
+  .kpi{background:#12305f;border-radius:14px;padding:14px 18px}
+  .kpi b{display:block;font-size:2.4rem;font-weight:900;color:var(--laranja);line-height:1.1}
+  .kpi span{color:#aabad6}
+  .dupla{display:grid;grid-template-columns:1.15fr 1fr;gap:14px}
+  .caixa{background:#0f2750;border-radius:16px;padding:16px;margin-bottom:14px}
+  .caixa h3{margin:0 0 10px;color:#cfd9ec;font-size:1.05rem;font-weight:700}
+  #feed{display:flex;flex-direction:column;gap:10px;max-height:560px;overflow:hidden}
+  .msg{background:#12305f;border-radius:12px;padding:12px 14px;border-left:6px solid #2e7dd7;animation:entra .5s ease-out}
+  .msg.Crítica{border-left-color:#e74c3c}.msg.Alta{border-left-color:#f28c28}.msg.Média{border-left-color:#e8d55a}
+  .msg b{display:block;font-size:1.1rem}.msg small{color:#aabad6}
+  @keyframes entra{from{opacity:0;transform:translateY(-14px)}to{opacity:1;transform:none}}
+  #status{color:#aabad6;font-size:.9rem}
+  @media (max-width:900px){.dupla{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.kpi b{font-size:1.8rem}.caixa{overflow-x:auto}.caixa svg{min-width:700px}.linha,.linha3{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header><div class="in"><div><h1>🔎 Raio-X da Escola SENAI</h1><small>Fundamentos de IA e Análise de Dados · dados fictícios para estudo</small></div><small id="ola"></small></div></header>
+<main>
+
+<!-- TELA 1 -->
+<section id="t1" class="card">
+  <nav aria-label="Navegação" style="margin-bottom:16px"><a style="color:inherit;text-decoration:underline" href="./sorteio.html">🎲 Abrir sorteio dos setores</a></nav>
+  <h2>1. Quem é o inspetor?</h2>
+  <label for="nome">Seu nome (aparece só aqui na sua tela)</label>
+  <input id="nome" type="text" maxlength="40" placeholder="Ex.: Ana">
+  <label for="apelido">Apelido para a turma (é ele que vai para a planilha)</label>
+  <input id="apelido" type="text" maxlength="20" placeholder="Ex.: Raio, Pixel, Coruja">
+  <label for="setor">Seu setor (o professor sorteia)</label>
+  <select id="setor"><option value="">Escolha...</option></select>
+  <p class="aviso">🔒 O seu <b>nome não sai deste computador</b>. Para a turma vai só o <b>apelido</b>.</p>
+  <div class="erro" id="e1"></div>
+  <button class="pri" onclick="ir2()">Começar a inspeção ➜</button>
+</section>
+
+<!-- TELA 2 -->
+<section id="t2" class="card oculto">
+  <h2>2. Sua missão: inspecionar <span class="set"></span></h2>
+  <p>A direção tem um orçamento curto e precisa decidir <b>o que consertar primeiro</b>. Você é o <b>inspetor</b> desse setor: registre <b>4 ou 5 problemas</b> que um setor assim costuma ter numa escola técnica.</p>
+  <p class="aviso">📌 Os dados são <b>fictícios</b>, mas precisam ser <b>realistas</b>: um projetor não custa R$ 300 mil e um bebedouro afeta a escola toda. Pense no que você já viu dar problema em oficina, laboratório e sala.</p>
+  <p>Sem ideia? Peça ajuda para uma IA com este prompt:</p>
+  <div class="prompt" id="prompt"></div>
+  <div class="acoes"><button class="sec" onclick="copiar()" id="btCopiar">📋 Copiar o prompt</button></div>
+  <p class="aviso" style="margin-top:14px">🔒 Não escreva nome de professor, aluno ou funcionário no problema. Fale do <b>problema</b>, nunca de <b>pessoas</b>.</p>
+  <button class="pri" onclick="mostra('t3')">Registrar problemas ➜</button>
+</section>
+
+<!-- TELA 3 -->
+<section id="t3" class="card oculto">
+  <h2>3. Abra um chamado</h2>
+  <label for="prob">Qual é o problema? (uma frase)</label>
+  <input id="prob" type="text" maxlength="120" placeholder="Ex.: Torno 2 com o motor queimado">
+  <div class="linha">
+    <div><label for="cat">Categoria</label><select id="cat"></select></div>
+    <div><label for="pri">Prioridade</label><select id="pri"></select></div>
+  </div>
+  <div class="linha3">
+    <div><label for="alunos">Alunos afetados</label><input id="alunos" type="text" inputmode="numeric" placeholder="Ex.: 30"></div>
+    <div><label for="dias">Dias parado</label><input id="dias" type="text" inputmode="numeric" placeholder="Ex.: 10"></div>
+    <div><label for="custo">Custo para resolver (R$)</label><input id="custo" type="text" inputmode="numeric" placeholder="Ex.: 2500"></div>
+  </div>
+  <details style="margin-top:10px"><summary><b>Como escolher a prioridade?</b></summary>
+    <p><b>Crítica:</b> risco de acidente, lei (acessibilidade) ou aula impossível.<br><b>Alta:</b> atrapalha muito a aula prática.<br>
+    <b>Média:</b> atrapalha, mas dá para contornar.<br><b>Baixa:</b> incomoda, mas não para nada.</p>
+  </details>
+  <div class="erro" id="e3"></div>
+  <div class="acoes"><button class="pri" onclick="adicionar()">➕ Adicionar à minha lista</button></div>
+
+  <h2 style="margin-top:22px">Meus chamados (<span id="qtd">0</span>/5)</h2>
+  <p id="vazia" style="color:var(--cinza)">Nenhum chamado ainda.</p>
+  <div id="lista"></div>
+  <p class="aviso" id="avisoForm">Clique em <b>📤 Enviar</b> em cada chamado. Abre o formulário já preenchido: confira e clique em <b>Enviar</b> lá. Depois volte aqui para o próximo.</p>
+  <p class="aviso oculto" id="semForm">O professor ainda não ligou o formulário. Use <b>Baixar meus chamados</b> e entregue o arquivo.</p>
+  <div class="acoes"><button class="sec" onclick="baixarCSV()">⬇️ Baixar meus chamados (CSV)</button></div>
+</section>
+
+<!-- TELÃO: ?painel  (teste sem planilha: ?painel&demo) -->
+<section id="painel" class="oculto">
+  <div class="kpis">
+    <div class="kpi"><b id="kCham">0</b><span>chamados recebidos</span></div>
+    <div class="kpi"><b id="kCusto">R$ 0</b><span>custo total para resolver</span></div>
+    <div class="kpi"><b id="kCrit">0</b><span>chamados críticos</span></div>
+    <div class="kpi"><b id="kImp">0</b><span>aluno-dias perdidos (alunos × dias)</span></div>
+  </div>
+  <div class="dupla">
+    <div class="caixa"><h3>📨 Chamados chegando agora</h3><div id="feed"><p style="color:#aabad6">Esperando o primeiro chamado...</p></div></div>
+    <div>
+      <div class="caixa"><h3>💰 Custo por setor (R$)</h3><svg id="barras" viewBox="0 0 760 330" width="100%" role="img" aria-label="Custo por setor"></svg></div>
+      <div class="caixa"><h3>🏷️ Chamados por categoria</h3><svg id="cats" viewBox="0 0 760 250" width="100%" role="img" aria-label="Chamados por categoria"></svg></div>
+    </div>
+  </div>
+  <p id="status"></p>
+</section>
+
+</main>
+<footer id="rodape">Dados fictícios para estudo. Os seus chamados ficam só no seu navegador até você enviar ou baixar.</footer>
+
+<script>
+/* ===== O PROFESSOR CONFIGURA AQUI ===== */
+// Link pré-preenchido do Google Forms, com as palavras APELIDO SETOR PROBLEMA CATEGORIA PRIORIDADE 111 222 333
+const LINK_FORMULARIO = "https://docs.google.com/forms/d/1IInc8eaTeFtyP9zgLoqtuXt-EXb4ETcOTN0VcXx5QBs/viewform?usp=pp_url&entry.477413514=APELIDO&entry.331699369=SETOR&entry.860790868=PROBLEMA&entry.1262962734=CATEGORIA&entry.352143795=PRIORIDADE&entry.523770220=111&entry.575525822=222&entry.69065599=333";
+// Link da planilha de respostas em CSV (gviz). Ex.: https://docs.google.com/spreadsheets/d/ID/gviz/tq?tqx=out:csv&gid=0
+const PLANILHA_CSV = "https://docs.google.com/spreadsheets/d/1IAZvMmgnlDd8_XiXamrBrv4WKXi1hLYkh9nxYlNWbdw/gviz/tq?tqx=out:csv&gid=0";
+// Setores da escola (pode editar)
+const SETORES = ["Oficina de Mecânica","Oficina de Elétrica","Oficina de Solda","Laboratório de Informática","Laboratório de Automação","Ferramentaria e Almoxarifado","Salas de aula","Áreas comuns"];
+/* ====================================== */
+
+const CATEGORIAS = ["Equipamento parado","Falta de material","Rede e computadores","Segurança e EPI","Climatização e energia","Conservação e limpeza","Acessibilidade"];
+const PRIORIDADES = ["Baixa","Média","Alta","Crítica"];
+const $ = id => document.getElementById(id);
+const telas = ["t1","t2","t3","painel"];
+function mostra(id){ telas.forEach(t => $(t).classList.toggle("oculto", t !== id)); window.scrollTo(0,0); }
+const d = { nome:"", apelido:"", setor:"", chamados:[] };
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+SETORES.forEach(s => $("setor").insertAdjacentHTML("beforeend", `<option>${esc(s)}</option>`));
+$("cat").innerHTML = '<option value="">Escolha...</option>' + CATEGORIAS.map(t => `<option>${t}</option>`).join("");
+$("pri").innerHTML = '<option value="">Escolha...</option>' + PRIORIDADES.map(t => `<option>${t}</option>`).join("");
+
+function ir2(){
+  d.nome = $("nome").value.trim(); d.apelido = $("apelido").value.trim(); d.setor = $("setor").value;
+  if (!d.nome || !d.apelido || !d.setor) { $("e1").textContent = "Preencha nome, apelido e setor."; return; }
+  if (d.apelido.toLowerCase() === d.nome.toLowerCase()) { $("e1").textContent = "O apelido não pode ser o seu nome. 😉"; return; }
+  $("ola").textContent = "Inspetor(a) " + d.nome;
+  document.querySelectorAll(".set").forEach(e => e.textContent = d.setor);
+  $("prompt").textContent =
+`Sou aluno de uma escola técnica do SENAI e estou fazendo um exercício de análise de dados com dados FICTÍCIOS.
+Liste 5 problemas realistas que o setor "${d.setor}" de uma escola técnica costuma ter.
+Para cada problema, me dê:
+- O problema em uma frase curta
+- Categoria: Equipamento parado, Falta de material, Rede e computadores, Segurança e EPI, Climatização e energia, Conservação e limpeza ou Acessibilidade
+- Prioridade: Baixa, Média, Alta ou Crítica
+- Quantos alunos ele afeta
+- Quantos dias costuma ficar sem solução
+- Um custo realista para resolver, em reais
+Use valores realistas para o Brasil. Não use nomes de pessoas.`;
+  const tem = LINK_FORMULARIO.includes("entry.");
+  $("avisoForm").classList.toggle("oculto", !tem); $("semForm").classList.toggle("oculto", tem);
+  mostra("t2");
+}
+function copiar(){
+  const t = $("prompt").textContent;
+  (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(
+    () => { $("btCopiar").textContent = "✅ Copiado! Cole na IA"; },
+    () => { const r = document.createRange(); r.selectNodeContents($("prompt")); const s = getSelection(); s.removeAllRanges(); s.addRange(r); $("btCopiar").textContent = "Selecionei o texto: aperte Ctrl+C"; });
+}
+function adicionar(){
+  const m = { prob:$("prob").value.trim(), cat:$("cat").value, pri:$("pri").value, alunos:$("alunos").value.trim(), dias:$("dias").value.trim(), custo:$("custo").value.trim(), enviado:false };
+  if (!m.prob || !m.cat || !m.pri || !m.alunos || !m.dias || !m.custo) { $("e3").textContent = "Preencha todos os campos."; return; }
+  const n = numBR;
+  if (!Number.isFinite(n(m.custo)) || n(m.custo) < 0 || ![m.alunos, m.dias].every(v => /^\d+$/.test(v) && Number.isSafeInteger(Number(v)))) {
+    $("e3").textContent = "Informe alunos e dias em números inteiros e um custo válido em reais.";
+    return;
+  }
+  if (d.chamados.length >= 5) { $("e3").textContent = "Você já registrou os 5 chamados."; return; }
+  const avisos = [];
+  if (n(m.custo) > 50000) avisos.push("custo acima de R$ 50 mil");
+  if (n(m.alunos) > 400) avisos.push("mais de 400 alunos afetados");
+  if (n(m.dias) > 180) avisos.push("mais de 180 dias parado");
+  $("e3").textContent = avisos.length ? "Atenção: " + avisos.join(", ") + ". É realista? Confira. Mesmo assim, adicionei." : "";
+  d.chamados.push(m); ["prob","alunos","dias","custo"].forEach(k => $(k).value = ""); $("cat").value = ""; $("pri").value = "";
+  lista();
+}
+function lista(){
+  $("qtd").textContent = d.chamados.length; $("vazia").classList.toggle("oculto", d.chamados.length > 0);
+  const tem = LINK_FORMULARIO.includes("entry.");
+  $("lista").innerHTML = d.chamados.map((m, i) => `<div class="item"><span class="pri-tag t-${esc(m.pri)}">${esc(m.pri)}</span>
+    <div class="txt"><b>${esc(m.prob)}</b><br><small>${esc(m.cat)} · ${esc(m.alunos)} alunos · ${esc(m.dias)} dias · R$ ${esc(m.custo)}</small></div>
+    ${tem ? `<button class="${m.enviado ? "ok" : "pri"}" onclick="enviar(${i})">${m.enviado ? "↗ Reabrir formulário" : "📤 Enviar"}</button>` : ""}</div>`).join("");
+}
+function enviar(i){
+  const m = d.chamados[i];
+  try {
+    const u = new URL(LINK_FORMULARIO), novos = new URLSearchParams();
+    const troca = { APELIDO:d.apelido, SETOR:d.setor, PROBLEMA:m.prob, CATEGORIA:m.cat, PRIORIDADE:m.pri, "111":m.alunos, "222":m.dias, "333":m.custo };
+    for (const [k, v] of u.searchParams) novos.append(k, v in troca ? troca[v] : v);
+    u.search = novos.toString();
+    const aba = window.open("about:blank", "_blank");
+    if (!aba) { $("e3").textContent = "Permita a abertura de novas abas para abrir o formulário."; return; }
+    aba.opener = null;
+    aba.location.replace(u.toString());
+    $("e3").textContent = "";
+    m.enviado = true; lista();
+  } catch (e) { $("semForm").classList.remove("oculto"); }
+}
+function baixarCSV(){
+  const q = s => '"' + String(s).replace(/"/g, '""') + '"';
+  const csv = "Apelido;Setor;Problema;Categoria;Prioridade;Alunos afetados;Dias parado;Custo estimado\n" +
+    d.chamados.map(m => [d.apelido, d.setor, m.prob, m.cat, m.pri, m.alunos, m.dias, m.custo].map(q).join(";")).join("\n") + "\n";
+  const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob(["﻿" + csv], { type:"text/csv;charset=utf-8" }));
+  a.download = "raio_x_" + d.apelido.replace(/[^\w-]+/g, "_") + ".csv"; document.body.appendChild(a); a.click(); a.remove();
+}
+
+/* ===================== TELÃO ===================== */
+function lerCSV(txt){
+  const linhas = []; let lin = [], campo = "", aspas = false;
+  for (let i = 0; i < txt.length; i++) {
+    const c = txt[i];
+    if (aspas) { if (c === '"') { if (txt[i+1] === '"') { campo += '"'; i++; } else aspas = false; } else campo += c; }
+    else if (c === '"') aspas = true;
+    else if (c === ",") { lin.push(campo); campo = ""; }
+    else if (c === "\n" || c === "\r") { if (c === "\r" && txt[i+1] === "\n") i++; lin.push(campo); linhas.push(lin); lin = []; campo = ""; }
+    else campo += c;
+  }
+  if (campo || lin.length) { lin.push(campo); linhas.push(lin); }
+  return linhas.filter(l => l.some(x => x.trim()));
+}
+// "R$ 8.500,00" -> 8500 ; "2400 reais" -> 2400 ; "14 dias" -> 14
+function numBR(s){
+  let t = String(s || "").replace(/[^\d.,-]/g, "");
+  if (!t) return NaN;
+  if (/,\d{1,2}$/.test(t)) t = t.replace(/\./g, "").replace(",", ".");   // decimal com vírgula
+  else t = t.replace(/[.,](?=\d{3}(\D|$))/g, "").replace(",", ".");       // separador de milhar
+  return /^-?\d+(?:\.\d+)?$/.test(t) ? Number(t) : NaN;
+}
+function paraObjetos(linhas){
+  if (!linhas.length) return [];
+  const cab = linhas[0].map(h => h.toLowerCase());
+  const col = nome => cab.findIndex(h => h.includes(nome));
+  const ix = { apelido:col("apelido"), setor:col("setor"), prob:col("problema"), cat:col("categoria"), pri:col("prioridade"), alunos:col("alunos"), dias:col("dias"), custo:col("custo") };
+  return linhas.slice(1).map(l => ({ apelido:(l[ix.apelido]||"").trim(), setor:(l[ix.setor]||"").trim(), prob:(l[ix.prob]||"").trim(),
+    cat:(l[ix.cat]||"").trim(), pri:(l[ix.pri]||"").trim(), alunos:numBR(l[ix.alunos]), dias:numBR(l[ix.dias]), custo:numBR(l[ix.custo]) }))
+    .filter(o => o.prob && o.prob.toLowerCase() !== "teste");
+}
+const NS = "http://www.w3.org/2000/svg";
+function el(tag, at, pai){ const e = document.createElementNS(NS, tag); for (const k in at) e.setAttribute(k, at[k]); if (pai) pai.appendChild(e); return e; }
+const brl = v => "R$ " + Math.round(v).toLocaleString("pt-BR");
+let jaVistos = 0;
+function barrasH(svg, rotulos, valores, cor, fmt){
+  svg.innerHTML = ""; const mx = Math.max(1, ...valores), h = svg.viewBox.baseVal.height, lh = h / rotulos.length;
+  rotulos.forEach((r, i) => {
+    const y = i * lh, w = valores[i] / mx * 320;
+    const t = el("text", { x:0, y:y + lh/2 + 7, fill:"#cfd9ec", "font-size":19 }, svg); t.textContent = r;
+    el("rect", { x:300, y:y + 6, width:Math.max(2, w), height:lh - 12, rx:6, fill:cor }, svg);
+    const v = el("text", { x:300 + w + 8, y:y + lh/2 + 7, fill:"#fff", "font-size":19, "font-weight":700 }, svg); v.textContent = fmt(valores[i]);
+  });
+}
+function desenhar(dados){
+  const ok = n => isFinite(n) ? n : 0;
+  $("kCham").textContent = dados.length;
+  $("kCusto").textContent = brl(dados.reduce((s, o) => s + (ok(o.custo) <= 50000 ? ok(o.custo) : 0), 0));
+  $("kCrit").textContent = dados.filter(o => o.pri.toLowerCase().startsWith("crít") || o.pri.toLowerCase().startsWith("crit")).length;
+  $("kImp").textContent = Math.round(dados.reduce((s, o) => s + ok(o.alunos) * ok(o.dias), 0)).toLocaleString("pt-BR");
+  if (dados.length) {
+    const ult = dados.slice(-6).reverse();
+    $("feed").innerHTML = ult.map((o, i) => `<div class="msg ${esc(o.pri)}" style="${i === 0 && dados.length > jaVistos ? "" : "animation:none"}"><b>${esc(o.prob)}</b>
+      <small>${esc(o.setor)} · ${esc(o.pri)} · ${isFinite(o.custo) ? brl(o.custo) : "custo ?"} · por ${esc(o.apelido || "?")}</small></div>`).join("");
+  }
+  else $("feed").textContent = "Esperando o primeiro chamado...";
+  jaVistos = dados.length;
+  const custoSet = SETORES.map(s => dados.filter(o => o.setor === s).reduce((a, o) => a + (ok(o.custo) <= 50000 ? ok(o.custo) : 0), 0));
+  barrasH($("barras"), SETORES.map(s => s.replace("Laboratório", "Lab.").replace("Ferramentaria e Almoxarifado", "Ferramentaria")), custoSet, "#2e7dd7", brl);
+  barrasH($("cats"), CATEGORIAS, CATEGORIAS.map(c => dados.filter(o => o.cat === c).length), "#f28c28", v => v);
+}
+async function buscar(){
+  try {
+    const r = await fetch(PLANILHA_CSV + (PLANILHA_CSV.includes("?") ? "&" : "?") + "t=" + Date.now(), { cache:"no-store" });
+    if (!r.ok) throw new Error("HTTP " + r.status);
+    const txt = await r.text();
+    if (/^\s*</.test(txt)) throw new Error("a planilha não está liberada para leitura");
+    desenhar(paraObjetos(lerCSV(txt)));
+    $("status").textContent = "Atualizado às " + new Date().toLocaleTimeString("pt-BR") + " · atualiza a cada 10 segundos · custos acima de R$ 50 mil ficam fora do total até alguém conferir";
+  } catch (e) { $("status").textContent = "⚠️ Não consegui ler a planilha (" + e.message + "). Confira o link PLANILHA_CSV e o compartilhamento."; }
+}
+const DEMO = [
+ ["Coruja","Oficina de Mecânica","Torno 2 com o motor queimado","Equipamento parado","Crítica",32,21,8500],
+ ["Pixel","Laboratório de Informática","Wi-Fi cai durante a aula","Rede e computadores","Alta",120,20,3500],
+ ["Raio","Oficina de Elétrica","Luvas isolantes vencidas","Segurança e EPI","Crítica",28,4,1500],
+ ["Turbo","Oficina de Solda","Exaustor de fumos com defeito","Segurança e EPI","Crítica",20,14,6800],
+ ["Neon","Laboratório de Automação","CLP da bancada 2 sem comunicação","Equipamento parado","Alta",16,16,7500],
+ ["Faísca","Ferramentaria e Almoxarifado","Ferramentas somem sem controle","Falta de material","Média",80,10,2500],
+ ["Cometa","Salas de aula","Ventiladores sem funcionar","Climatização e energia","Média",35,30,1800],
+ ["Lince","Áreas comuns","Elevador parado: cadeirante sem acesso","Acessibilidade","Crítica",3,15,12000],
+ ["Bit","Laboratório de Informática","Computadores lentos para ligar","Rede e computadores","Alta",64,30,9000],
+ ["Nuvem","Oficina de Mecânica","Falta de pastilhas para usinagem","Falta de material","Alta",40,7,2400],
+ ["Jaguar","Áreas comuns","Bebedouro do térreo quebrado","Conservação e limpeza","Média",300,12,1500],
+ ["Coruja","Oficina de Mecânica","Paquímetros descalibrados","Falta de material","Média",30,5,1800],
+ ["Pixel","Laboratório de Informática","Projetor com imagem amarelada","Equipamento parado","Média",32,15,280000],
+ ["Turbo","Oficina de Solda","Falta de eletrodos","Falta de material","Alta",36,6,1900],
+ ["Cometa","Salas de aula","Cadeiras quebradas","Conservação e limpeza","Baixa",30,20,1400]]
+ .map(([apelido, setor, prob, cat, pri, alunos, dias, custo]) => ({ apelido, setor, prob, cat, pri, alunos, dias, custo }));
+if (location.search.includes("painel")) {
+  document.body.classList.add("telao"); $("rodape").textContent = "Telão da turma · dados fictícios · só aparecem apelidos";
+  mostra("painel"); desenhar([]);
+  if (location.search.includes("demo")) { let k = 0; const iv = setInterval(() => { k++; desenhar(DEMO.slice(0, k)); if (k >= DEMO.length) clearInterval(iv); }, 1500); $("status").textContent = "Modo demonstração (dados de teste)"; }
+  else if (!PLANILHA_CSV) $("status").textContent = "⚠️ O professor ainda não colocou o link PLANILHA_CSV. Para testar, abra com ?painel&demo";
+  else { buscar(); setInterval(buscar, 10000); }
+}
+</script>
+</body>
+</html>
